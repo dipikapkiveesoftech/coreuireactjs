@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { Component, lazy } from 'react';
 import {
   CBadge,
   CButton,
@@ -14,8 +14,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-
-const Dashboard = () => {
+export default class Dashboard extends Component{
+  constructor() {
+    super();
+    this.state = {
+      setShow: true
+    }
+  }
+  render(){
   return (
     <>
       <CCard>
@@ -544,7 +550,6 @@ const Dashboard = () => {
         </CCol>
       </CRow>
     </>
-  )
+  )}
 }
 
-export default Dashboard

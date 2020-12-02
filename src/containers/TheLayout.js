@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react';
 import {
   TheContent,
   TheSidebar,
@@ -6,10 +6,12 @@ import {
   TheHeader
 } from './index'
 
-const TheLayout = () => {
-
+export default class  TheLayout extends Component {
+  
+  render(){
   return (
     <div className="c-app c-default-layout">
+       
       <TheSidebar/>
       <div className="c-wrapper">
         <TheHeader/>
@@ -19,7 +21,5 @@ const TheLayout = () => {
         <TheFooter/>
       </div>
     </div>
-  )
+  )}
 }
-
-export default TheLayout

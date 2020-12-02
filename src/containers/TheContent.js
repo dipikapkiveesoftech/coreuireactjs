@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Component, Suspense } from 'react';
 import {
   Redirect,
   Route,
@@ -15,7 +15,8 @@ const loading = (
   </div>
 )
 
-const TheContent = () => {
+class TheContent extends Component {
+  render(){
   return (
     <main className="c-main">
       <CContainer fluid>
@@ -40,7 +41,7 @@ const TheContent = () => {
         </Suspense>
       </CContainer>
     </main>
-  )
+  )}
 }
 
 export default React.memo(TheContent)

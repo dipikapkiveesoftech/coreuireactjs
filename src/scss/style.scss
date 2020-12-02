@@ -6,3 +6,19 @@
 
 // If you want to add something do it here
 @import "custom";
+
+.errorMsg {
+    color: #cc0000;
+    margin-bottom: 12px;
+  }
+  
+  .sucessMsg {
+    color: #6B8E23;
+    margin-bottom: 10px;
+  }
+ .alert, .toast{
+    position: absolute !important;
+    top:75px !important;
+    right: 10px !important;
+    z-index: inherit;
+ }
