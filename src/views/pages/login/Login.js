@@ -1,5 +1,5 @@
 import React, { useState, Component } from 'react';
-import { Link,Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Toast, Alert } from 'react-bootstrap';
 import {
   CButton,
@@ -30,32 +30,9 @@ export default class Login extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
+    this.submituserLoginForm = this.submituserLoginForm.bind(this);
 
   };
-
-  componentDidMount() {
-    fetch("https://api.example.com/items")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result.items
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
-  }
-
 
   handleChange(e) {
     let fields = this.state.fields;
@@ -63,17 +40,40 @@ export default class Login extends Component {
     this.setState({
       fields
     });
-
   }
 
-  submituserRegistrationForm(e) {
+  submituserLoginForm(e) {
     e.preventDefault();
     if (this.validateForm()) {
+
       let fields = {};
-      fields["email"] = "";
-      fields["password"] = "";
-      this.setState({ fields: fields });
-      this.setState({ setShow: true });
+
+      fetch("http://localhost:3000/api/v1/users/")
+        .then(res => res.json())
+        .then(
+          (result) => {
+            console.log("resulkt", result);
+            this.setState({
+              isLoaded: true,
+              items: result
+            });
+          },
+          // Note: it's important to handle errors here
+          // instead of a catch() block so that we don't swallow
+          // exceptions from actual bugs in components.
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        )
+
+
+      // fields["email"] = "";
+      // fields["password"] = "";
+      // this.setState({ fields: fields });
+      // this.setState({ setShow: true });
       window.location.href = '/#/home'
     }
 
@@ -116,7 +116,7 @@ export default class Login extends Component {
               <CCardGroup>
                 <CCard className="p-4">
                   <CCardBody>
-                    <CForm method="post" name="userRegistrationForm" onSubmit={this.submituserRegistrationForm}>
+                    <CForm name="userLoginForm" onSubmit={this.submituserLoginForm}>
                       <h1>Login</h1>
                       <p className="text-muted">Sign In to your account</p>
                       <CInputGroup className="mb-3">

@@ -92,9 +92,9 @@ export default class TheHeaderDropdown extends Component {
           </CDropdownItem>
           <CDropdownItem divider />
           <CDropdownItem>
-            <CIcon name="cil-account-logout" className="mfe-2" />
-            <Link to="/">
-              <CButton color="primary" className="mt-3" active tabIndex={-1}>Logout</CButton>
+          <CIcon name="cil-lock-locked" className="mfe-2" /> 
+            <Link to="/" active tabIndex={-1}>
+              <CButton >Logout</CButton>
             </Link>
           </CDropdownItem>
         </CDropdownMenu>

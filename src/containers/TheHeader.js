@@ -43,7 +43,7 @@ const TheHeader = () => {
 
   return (
     <CHeader withSubheader>
-      <Alert show={show} key="success" variant="success" onClose={() => setShow(false)} dismissible>
+      <Alert show={show} position='top-right' key="success" variant="success" onClose={() => setShow(false)} dismissible>
         Login Success....!!Welcome User!
           </Alert>
       {/* <Toast show={show} onClick={() => setShow(false)} dismissible>
