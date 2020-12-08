@@ -23,5 +23,18 @@ export default [
     name: 'Typography',
     to: '/theme/typography',
     icon: 'cil-pencil',
-  }
+  },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'Notifications',
+    route: '/notifications',
+    icon: 'cil-bell',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Toaster',
+        to: '/notifications/toaster'
+      }
+    ]
+  },
 ]

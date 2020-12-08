@@ -3,6 +3,7 @@ import React from 'react';
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'));
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'));
+const Toaster = React.lazy(() => import('./views/notifications/toaster/Toaster'));
 
 const routes = [
  
@@ -10,7 +11,8 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', name: 'Theme', component: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', component: Colors },
-  { path: '/theme/typography', name: 'Typography', component: Typography }
+  { path: '/theme/typography', name: 'Typography', component: Typography },
+  { path: '/notifications/toaster', name: 'Toaster', component: Toaster },
 ];
 
 export default routes;
