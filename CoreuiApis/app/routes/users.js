@@ -14,14 +14,11 @@ router.route('/')
   .get(authorize([ADMIN]), userCtrl.getUsers)
 
   // Create New User
-  .post(authorize([ADMIN]), userCtrl.createUser);
+  .post(authorize([ADMIN]), userCtrl.createUser); 
+  
+router.route('/user/:id') 
 
-
-router.route('/user/:id')
-
-  // Get User
-  .get(authorize([ADMIN]), userCtrl.getUserById)
-
+.get(authorize([ADMIN]), userCtrl.getUserById)
   // Update User
   .put(authorize([ADMIN]), userCtrl.updateUser)
 
