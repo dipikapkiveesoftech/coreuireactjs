@@ -74,8 +74,7 @@ const updateUser = (req, res) => {
       name: req.body.name,
       email: req.body.email,
       mobile: req.body.mobile,
-      role: req.body.role, 
-      password: req.body.password
+      role: req.body.role,      
   }, {new: true})
   .then(user => {
       if(!user) {
@@ -117,6 +116,14 @@ const deleteUser = async (req, res) => {
   });
 };
 
+const search = async (req,res) => {
+    const searchfield = req.query.name || req.query.mobile;
+    User.find( { $or:[ {'name':{$regex: searchfield,$options: '$i'}}, {'mobile':{$regex: searchfield,$options: '$i'}}]})   
+    .then(data => {
+      res.send(data);
+    })
+};
+
 module.exports = {
   createUser,
   getUsers,
@@ -124,4 +131,5 @@ module.exports = {
   updateUser,
   deleteUser,
   loginUser,
+  search,
 };

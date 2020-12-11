@@ -25,8 +25,12 @@ router.route('/user/:id')
   // Delete User
   .delete(authorize(ADMIN), userCtrl.deleteUser);
 
+router.route("/search")
 
+  .get(userCtrl.search);
+  
 router.route('/login')
-.post(userCtrl.loginUser);
+  
+  .post(userCtrl.loginUser);
 
 module.exports = router;
