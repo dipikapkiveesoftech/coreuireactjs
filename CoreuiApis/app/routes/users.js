@@ -17,7 +17,7 @@ router.route('/')
   .post(authorize([ADMIN]), userCtrl.createUser);
 
 
-router.route('/:id')
+router.route('/user/:id')
 
   // Get User
   .get(authorize([ADMIN]), userCtrl.getUserById)
@@ -28,5 +28,8 @@ router.route('/:id')
   // Delete User
   .delete(authorize(ADMIN), userCtrl.deleteUser);
 
+
+router.route('/login')
+.post(userCtrl.loginUser);
 
 module.exports = router;
