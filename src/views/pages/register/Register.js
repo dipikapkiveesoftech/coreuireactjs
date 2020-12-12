@@ -16,6 +16,7 @@ import {
   CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import ToasterSep from '../../../reusable/ToasterSep';
 
 export default class Register extends Component {
 
@@ -63,7 +64,11 @@ export default class Register extends Component {
             const error = (data && data.message) || response.status;
             return Promise.reject(error);
           }
-          this.setState({ postId: data.id , setShow : true})
+          else{
+          this.setState({ list : [{
+            color: "success",
+            message : "Hello login"}] , isShowToast : true ,postId: data.id})
+          }
         })
         .catch(error => {
           this.setState({ errorMessage: error.toString() });
@@ -82,12 +87,12 @@ export default class Register extends Component {
 
     if (!fields["name"]) {
       formIsValid = false;
-      errors["name"] = "*Please enter your Name.";
+      errors["name"] = "*Please enter your name.";
     }
 
     if (!fields["mobile"]) {
       formIsValid = false;
-      errors["mobile"] = "*Please enter your Mobile No.";
+      errors["mobile"] = "*Please enter your mobile no.";
     }
 
     if (!fields["email"]) {
@@ -109,7 +114,7 @@ export default class Register extends Component {
     }
     if (!fields["npassword"]) {
       formIsValid = false;
-      errors["npassword"] = "*Please enter your Confirm password.";
+      errors["npassword"] = "*Please enter your confirm password.";
     }
     if (fields["npassword"] != fields["password"]) {
       formIsValid = false;
@@ -123,9 +128,9 @@ export default class Register extends Component {
   render() {
     return (
       <div className="c-app c-default-layout flex-row align-items-center">
-        <Alert show={this.state.setShow} key="success" variant="success" onClose={() =>  window.location.href = '/'} dismissible>
-          Registration Success....!!Now you can login!
-          </Alert>
+        {this.state.isShowToast ? <ToasterSep toastList={this.state.list}
+              position="top-right"
+              color={this.state.list.color} /> : null}
         <CContainer>
           <CRow className="justify-content-center">
             <CCol md="9" lg="7" xl="6">

@@ -43,9 +43,6 @@ const TheHeader = () => {
 
   return (
     <CHeader withSubheader>
-      <Alert show={show} position='top-right' key="success" variant="success" onClose={() => setShow(false)} dismissible>
-        Login Success....!!Welcome User!
-          </Alert>
       {/* <Toast show={show} onClick={() => setShow(false)} dismissible>
           <Toast.Header>
             <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />

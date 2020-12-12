@@ -16,6 +16,7 @@ import {
   CRow
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import ToasterSep from '../../../reusable/ToasterSep';
 
 export default class Login extends Component {
   constructor() {
@@ -26,7 +27,8 @@ export default class Login extends Component {
       items: [],
       fields: {},
       errors: {},
-      setShow: false
+      isShowToast: false,
+      list:[]
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -45,9 +47,7 @@ export default class Login extends Component {
   submituserLoginForm(e) {
     e.preventDefault();
     if (this.validateForm()) {
-
       let fields = {};
-
       fetch("http://localhost:3000/api/v1/users/")
         .then(res => res.json())
         .then(
@@ -56,11 +56,12 @@ export default class Login extends Component {
             this.setState({
               isLoaded: true,
               items: result
-            });
+            })
+            this.setState({ list : [{
+                    color: "success",
+                    message : "Hello login"}] , isShowToast : true })
+            window.location.href = '/#/home'
           },
-          // Note: it's important to handle errors here
-          // instead of a catch() block so that we don't swallow
-          // exceptions from actual bugs in components.
           (error) => {
             this.setState({
               isLoaded: true,
@@ -68,15 +69,11 @@ export default class Login extends Component {
             });
           }
         )
-
-
       // fields["email"] = "";
       // fields["password"] = "";
       // this.setState({ fields: fields });
       // this.setState({ setShow: true });
-      window.location.href = '/#/home'
     }
-
   }
 
   validateForm() {
@@ -110,6 +107,9 @@ export default class Login extends Component {
   render() {
     return (
       <div className="c-app c-default-layout flex-row align-items-center">
+         {this.state.isShowToast ? <ToasterSep toastList={this.state.list}
+              position="top-right"
+              color={this.state.list.color} /> : null}
         <CContainer>
           <CRow className="justify-content-center">
             <CCol md="8">

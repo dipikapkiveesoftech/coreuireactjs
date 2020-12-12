@@ -13,17 +13,46 @@ export default [
     _children: ['Theme']
   },
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Colors',
-    to: '/theme/colors',
+    _tag: 'CSidebarNavDropdown',
+    name: 'Theme',
+    route: '/colors',
     icon: 'cil-drop',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Colors',
+        to: '/theme/colors',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Typography',
+        to: '/theme/typography',
+      },
+    ]
   },
   {
-    _tag: 'CSidebarNavItem',
-    name: 'Typography',
-    to: '/theme/typography',
-    icon: 'cil-pencil',
+    _tag: 'CSidebarNavTitle',
+    _children: ['Components']
   },
+  {
+    _tag: 'CSidebarNavDropdown',
+    name: 'User',
+    route: '/Userlist',
+    icon: 'cil-user',
+    _children: [
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'User List',
+        to: '/user/userlist',
+      },
+      {
+        _tag: 'CSidebarNavItem',
+        name: 'Profile',
+        to: '/user/profile',
+      }
+    ]
+  },
+  
   {
     _tag: 'CSidebarNavDropdown',
     name: 'Notifications',
@@ -33,7 +62,7 @@ export default [
       {
         _tag: 'CSidebarNavItem',
         name: 'Toaster',
-        to: '/notifications/toaster'
+        to: '/notifications/toaster',
       }
     ]
   },
