@@ -2,7 +2,8 @@ import React, { useState, Component } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 
-import usersData from '../../users/UsersData'
+import usersData from '../../users/UsersData';
+import moment from 'moment';
 
 export default class Userdetail extends Component {
 
@@ -27,7 +28,7 @@ export default class Userdetail extends Component {
         <CCol lg={6}>
           <CCard>
             <CCardHeader>
-              User id: {this.props.match.params.id}
+              User Detail
             </CCardHeader>
             <CCardBody>
               <table className="table table-striped table-hover">
@@ -49,8 +50,8 @@ export default class Userdetail extends Component {
                     <td><strong>{this.state.userDetails.role}</strong></td>
                   </tr>
                   <tr>
-                    <td>CurrentLogin</td>
-                    <td><strong>{this.state.userDetails.currentLogin}</strong></td>
+                    <td>Last Login</td>
+                    <td><strong>{moment(this.state.userDetails.lastLogin).format('d MMM yy')}</strong></td>
                   </tr>
                 </tbody>
               </table>

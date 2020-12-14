@@ -14,7 +14,8 @@ import {
   CModalBody,
   CModalHeader,
   CModalFooter,
-  CModalTitle
+  CModalTitle,
+  CCardFooter
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import ToasterSep from '../../../reusable/ToasterSep';
@@ -26,26 +27,54 @@ export default class Userlist extends Component {
     super(props);
 
     this.state = {
-      page: '',
-      setPage: 1,
+      currentPage: 1,
       setData: [],
       pageChange: '',
       showModal: false,
       dltId: '',
       list: [],
-      isShowToast: false
+      pagination: {},
+      isShowToast: false,
+      limit : 5
     }
+    this.getUserList();
   }
 
-  componentDidMount() {
-    fetch('http://localhost:3000/api/v1/users/', {
+  getUserList() {
+    fetch('http://localhost:3000/api/v1/users?page=' + this.state.currentPage, {
       method: 'GET'
     })
       .then(response => response.json())
       .then((data) => {
-        this.setState({ setData: data })
+        if (data.statuscode === 200) {
+          this.setState({ setData: data.data.docs, pagination: data.data})
+        }
       })
   }
+
+  setActivepage(activepg){
+      this.setState({ currentPage : activepg})
+      fetch('http://localhost:3000/api/v1/users?page=' + activepg, {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then((data) => {
+        if (data.statuscode === 200) {
+          this.setState({ setData: data.data.docs, pagination: data.data})
+        }
+      })
+  }
+
+  onTblPageChange(){
+    console.log("Hello Change");
+  }
+  // clearfilter() {
+  //   // this.spage = 1;
+  //   // this.search = '';
+  //   // this.limit = 10;
+  //   this.setState({ activepage : 1, limit : 10})
+  //   this.getUserlist(this.state.activepage);
+  // }
 
   deleteRecord(itemId) {
     fetch('http://localhost:3000/api/v1/users/' + itemId, {
@@ -83,17 +112,18 @@ export default class Userlist extends Component {
                 items={this.state.setData}
                 fields={[
                   { key: 'name', _classes: 'font-weight-bold' },
-                  'email', 'mobile', 'role', 'lastLogin' , 'Action'
+                  'email', 'mobile', 'role', 'lastLogin', 'Action'
                 ]}
                 columnFilter
                 tableFilter
                 hover
                 sorter
                 striped
-                itemsPerPage={5}
-                activePage={this.state.page}
+                itemsPerPageSelect
+                onPageChange={this.onTblPageChange()}
+                itemsPerPage={10}
                 clickableRows
-                pagination
+                // pagination
                 // onRowClick={(item) => this.props.history.push(`/user/userdetail/${item.id}`)}
                 scopedSlots={{
                   'Action':
@@ -107,12 +137,22 @@ export default class Userlist extends Component {
                   'lastLogin':
                     (item) => (
                       <td>
-                          { (new Date(item.lastLogin)).to }
+                        {/* { (new Date(item.lastLogin)).toDateString } */}
+                        {moment(item.lastLogin).format('d MMM yy')}
                       </td>
                     )
                 }}
               />
             </CCardBody>
+            <CCardFooter>
+              <CPagination
+                activePage={this.state.currentPage}
+                pages={this.state.pagination.totalPages}
+                size="lg"
+                align="center"
+                onActivePageChange={(i) => this.setActivepage(i)}
+              ></CPagination>
+            </CCardFooter>
             <CModal
               show={this.state.showModal}
               onClose={() => this.setState({ showModal: false })}

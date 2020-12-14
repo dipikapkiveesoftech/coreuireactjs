@@ -4,6 +4,7 @@ const User = require('../../models/user');
 const { ADMIN } = require('../../constants/roles');
 const { PermissionDeniedError } = require('../../constants/errors');
 const { generate: generateToken } = require('../../lib/token');
+const db = require('../../constants/db');
 
 const createUser = async (req, res, next) => {
   try {
@@ -46,25 +47,34 @@ const loginUser = async (req, res, next) => {
 };
 const getUsers = async (req, res, next) => {
   try {
-    const result = await User.find({}, { password: false }).lean();
-    res.json(result);
+    const query = await db.checkQueryString(req.query)
+    res.status(200).json(await db.getItems(req, User , query))
   } catch (error) {
     next(error);
   }
-};
+}
 
 const getUserById = async (req, res, next) => {
-  // if ((req.tokenData.role !== ADMIN) && req.params.id !== req.tokenData.userId) {
-  //   const error = new PermissionDeniedError();
-  //   return next(error);
-  // }
-
   try {
-    const result = await User.findOne({ id: req.params.id }, { password: false });
+    // const result = await User.findById({ id: req.params.id }, { password: false });
+    const result = await User.findById({ id: req.params.id });
     res.json(result);
   } catch (error) {
     next(error);
   }
+  // try {
+  //   const id= await User.findById({ id: req.params.id }, { password: false });
+  //   const result = await db.getItem(id, User)
+  //   const data = {
+  //     success: true,
+  //     statuscode: 200,
+  //     message: 'Record found successfully',
+  //     item: result
+  //   }
+  //   res.status(200).json(data)
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 const updateUser = async (req, res, next) => {

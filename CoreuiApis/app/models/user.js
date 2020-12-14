@@ -2,6 +2,7 @@
 
 const { v4: uuid } = require('uuid');
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 const { roles, USER } = require('../constants/roles');
 
@@ -11,7 +12,9 @@ const options = {
 };
 
 const UserSchema = new Schema({
-  id: { type: String, default: uuid, unique: true },
+  // id: { type: String,
+  //    default: uuid,
+  //     unique: true },
   name: {
     type: String,
     required: true,
@@ -41,6 +44,7 @@ const UserSchema = new Schema({
   lastLogin: { type: Date, default: Date.now },
   lastFailedLogin: Date,
   currentLogin: { type: Date, default: Date.now },
-}, options);
+}, options)
 
+UserSchema.plugin(mongoosePaginate)
 module.exports = mongoose.model('User', UserSchema);
