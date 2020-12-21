@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
-
+const { response } = require('express');
+const User = require('../models/user')
 const tokenExpirePeriod = config.get('JWT_LIFETIME');
 const jwtSecret = config.get('JWT_SECRET');
 
@@ -27,19 +28,33 @@ async function generateToken(payLoad, expiresIn = tokenExpirePeriod) {
     });
   });
 }
-
 async function verifyToken(token) {
+  console.log(token);
   if (!token) {
     const error = new TypeError('Token Should Not Be Empty');
     throw error;
   }
 
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, jwtSecret, (error, decodedToken) => {
+  return new Promise((resolve, reject) => {    
+    jwt.verify(token, jwtSecret, (error, decodedToken) => {      
       if (error) {
+        console.log(error);
         reject(error);
-      } else {
+      } else {       
         resolve(decodedToken);
+        console.log(decodedToken);
+        console.log(decodedToken.userId);         
+          console.log("dfgseg");
+          User.findById(decodedToken.userId)
+        .then(user => {
+          if (user) {
+            console.log("ert");
+            return done(null, user);            
+          }
+          console.log("dgfg");
+          return done(null, false);
+        })  
+            
       }
     });
   });
