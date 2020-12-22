@@ -77,6 +77,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
 const getUsers = async (req, res, next) => {
   try {
     const result = await User.find({}, { password: false }).lean();
@@ -113,12 +114,15 @@ const updateUser = (req, res) => {
           message: "User not found with id " + req.params.id
         });
       }
-      res.send(user);
+      return res.status(402).send({
+        message: "Successfully Updated...",
+        user
+      });
     }).catch(err => {
       console.log(err);
       if (err.name === 'MongoError' && err.code === 11000) {
-        return res.status(409).send({
-          message: "fill all detail for " + req.params.id
+        return res.status(409).send({       
+          message: "Duplicate entry"
         });
       }
       return res.status(400).send({
