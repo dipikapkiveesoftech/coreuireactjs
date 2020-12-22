@@ -28,37 +28,43 @@ async function generateToken(payLoad, expiresIn = tokenExpirePeriod) {
     });
   });
 }
-async function verifyToken(token) {
-  console.log(token);
+  async function verifyToken(token) {  
   if (!token) {
     const error = new TypeError('Token Should Not Be Empty');
     throw error;
   }
 
-  return new Promise((resolve, reject) => {    
+   const mypromise =  new Promise((resolve, reject) => {    
     jwt.verify(token, jwtSecret, (error, decodedToken) => {      
       if (error) {
         console.log(error);
         reject(error);
       } else {       
-        resolve(decodedToken);
+        const token1 = jwt.decode()
         console.log(decodedToken);
-        console.log(decodedToken.userId);         
+        console.log(decodedToken.userId);  
+        find(decodedToken.userId);       
           console.log("dfgseg");
-          User.findById(decodedToken.userId)
-        .then(user => {
-          if (user) {
-            console.log("ert");
-            return done(null, user);            
-          }
-          console.log("dgfg");
-          return done(null, false);
-        })  
-            
-      }
-    });
+    }
   });
-}
+});
+}         
+async function find(uid){
+User.findById(uid)
+    .then(user => {
+            if (user) {
+              console.log(user);
+              return  user;            
+            }
+            console.log("dgfg");
+            return false;
+          })
+          .catch(err => {
+            console.log("sdf");
+            return false;
+          })
+        }    
+
 
 module.exports = {
   generate: generateToken,

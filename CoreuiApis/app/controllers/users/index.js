@@ -1,20 +1,20 @@
 'use strict';
 const User = require('../../models/user');
-const { generate: generateToken } = require('../../lib/token');
-const { verify: verifyToken } = require('../../lib/token');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { JWT_SECRET } = require('../../../config/default')
+const jwt = require('jsonwebtoken');
 const createUser = async (req, res) => {
   try {
     let { email } = req.body;
     const user = await User.findOne({ email });;
-    if (user) {     
+    if (user) {
       return res.status(400).json({
         message: `Username is already taken.`,
         success: false
       });
     }
     const password = await bcrypt.hash(req.body.password, 12);
-   
+
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
@@ -39,7 +39,6 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   let { email, password } = req.body;
-  // First Check if the username is in the database
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(404).json({
@@ -47,17 +46,19 @@ const loginUser = async (req, res) => {
       success: false
     });
   }
-  const isMatch = await User.findOne({ password });
+  let isMatch = await bcrypt.compare(password, user.password);
   if (isMatch) {
-    // Sign in the token and issue it to the user
-    const tokenPayload = {
-      userId: user._id,
-      role: user.role,
-    };
-    const token = await generateToken(tokenPayload);
-    console.log("token", token);
+    let token = jwt.sign(
+      {
+        userId: user._id,
+        role: user.role,
+      },
+      JWT_SECRET,
+      { expiresIn: "7 days" }
+    );
+    
     const resData = {
-      token,
+      token: `Bearer ${token}`,
       email: user.email,
       name: user.name,
       role: user.role,
@@ -88,7 +89,7 @@ const getUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
 
   try {
-    const result = await User.findOne({ id: req.params.id }, { password: false });
+    const result = await User.findOne({ _id: req.params.id }, { password: false });
     res.json(result);
   } catch (error) {
     next(error);
@@ -96,15 +97,15 @@ const getUserById = async (req, res, next) => {
 };
 
 const updateUser = (req, res) => {
-  if (!req.body.name || !req.body.email || !req.body.mobile) {   
+  if (!req.body.name || !req.body.email || !req.body.mobile) {
     return res.status(400).send({
       message: "Please fill all required field"
     });
   }
-  User.findOneAndUpdate({ id: req.params.id }, {
+  User.findOneAndUpdate({ _id: req.params.id }, {
     name: req.body.name,
     email: req.body.email,
-    mobile: req.body.mobile, 
+    mobile: req.body.mobile,
   }, { new: true })
     .then(user => {
       if (!user) {
@@ -115,8 +116,8 @@ const updateUser = (req, res) => {
       res.send(user);
     }).catch(err => {
       console.log(err);
-      if (err.name === 'MongoError' && err.code === 11000) {      
-          return res.status(409).send({
+      if (err.name === 'MongoError' && err.code === 11000) {
+        return res.status(409).send({
           message: "fill all detail for " + req.params.id
         });
       }
@@ -128,7 +129,7 @@ const updateUser = (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  User.findOneAndRemove({ id: req.params.id })
+  User.findOneAndRemove({ _id: req.params.id })
     .then(user => {
       if (!user) {
         return res.status(404).send({
@@ -156,64 +157,20 @@ const search = async (req, res) => {
     })
 };
 
-const getprofile = async (req, res) => {
-  console.log("dsfgg");
-  console.log("get", req.headers.authorization);
-  try {
-    verifyToken(req.headers.authorization)
-      .then(data => {
-        res.send(data);
-      });
-  } catch {
-    return res.status(400).json({
-      message: `token not verified`,
-      success: false
-    });
-  }
-}
-
-const checkRole = (roles) => async (req, res, next) => {
-console.log("check");
-  try {
-  const data = {
-    id: req.user.id,
-    roles
-  }
-  await checkPermissions(data, next)
-} catch (error) {
-  console.log("errror");
-}
-}
-
-const checkPermissions = async (data, next) => {
-  return new Promise((resolve, reject) => {
-    User.findById(data.id, (err, result) => {
-      itemNotFound(err, result, reject, 'NOT_FOUND')
-      if (data.roles.indexOf(result.role) > -1) {
-        return resolve(next())
-      }
-      return reject(buildErrObject(401, 'UNAUTHORIZED'))
-    })
-  })
-}
-
-const buildErrObject = (code, message) => {
+const serializeUser = user => {
   return {
-    code,
-    message
-  }
-}
-
-const itemNotFound = (err, item, reject, message) => {
-  if (err) {
-    reject(buildErrObject(422, err.message))
-  }
-  if (!item) {
-    reject(buildErrObject(404, message))
-  }
-}
+    _id: user._id,
+    email: user.email,
+    name: user.name,
+    mobile: user.mobile,
+    password: user.password,
+    role: user.role,
+    updatedAt: user.updatedAt,
+    createdAt: user.createdAt
+  };
+};
 module.exports = {
-  getprofile,
+  serializeUser,
   createUser,
   getUsers,
   getUserById,
@@ -221,5 +178,4 @@ module.exports = {
   deleteUser,
   loginUser,
   search,
-  checkRole,
 };

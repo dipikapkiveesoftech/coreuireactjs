@@ -1,6 +1,4 @@
 'use strict';
-
-const TokenServ = require('./token');
 const { PermissionDeniedError } = require('../constants/errors');
 
 // AllowedRoles --AccessLevel Needed TO Access resource

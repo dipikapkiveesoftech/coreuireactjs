@@ -1,15 +1,13 @@
 'use strict';
 
 const express = require('express');
-
 const userCtrl = require('../controllers/users');
-const { authorize } = require('../lib/auth');
-const { ADMIN,USER } = require('../constants/roles');
 const passport = require('passport');
 const userAuth = passport.authenticate("jwt", { session: false });
-const router = express.Router();   
-const validate = require('../controllers/validation')  
-router.route('/')
+const router = express.Router(); 
+const authorizer = require('../lib/authorize')  
+
+
 /**
  * @swagger
  * /api/users:
@@ -19,11 +17,14 @@ router.route('/')
  *     description: Returns all Users
  *     produces:
  *       - application/json
+ *     security:
+ *       - token: []
  *     responses:
  *       200:
  *         description: An array of Users 
- */  
-  .get(authorize([ADMIN]), userCtrl.getUsers)
+ */ 
+router.get('/',authorizer('admin'), userCtrl.getUsers)
+
 /**
  * @swagger
  * /api/users:
@@ -59,7 +60,8 @@ router.route('/')
  *       '409':
  *         description: Duplicate entry'
  */
-.post(userCtrl.createUser); 
+router.post('/',userCtrl.createUser); 
+
  /**
  * @swagger
  * /api/users/search:
@@ -78,11 +80,7 @@ router.route('/')
  *       200:
  *         description: Successfully search
  */
-router.route('/search')
-
-  .get(userCtrl.search);
-
-router.route('/:id')
+router.get('/search',userCtrl.search);
 
 /**
  * @swagger
@@ -103,7 +101,7 @@ router.route('/:id')
  *       200:
  *         description: Successfully deleted
  */
-.delete(userCtrl.deleteUser);
+router.delete('/:id', userCtrl.deleteUser);
 
 /**
  * @swagger
@@ -141,10 +139,7 @@ router.route('/:id')
  *       '409':
  *         description: Duplicate entry'
  */
-router.put(
-  '/:id',     
-  userCtrl.updateUser
-);
+ router.put('/:id',userCtrl.updateUser);
 
 /**
  * @swagger
@@ -190,7 +185,6 @@ router.get("/:id",userCtrl.getUserById);
 *       200:
 *         description: Successfully created
 */
-
 router.post("/login", async (req, res) => {
   await userCtrl.loginUser(req , res);
 });
@@ -210,12 +204,8 @@ router.post("/login", async (req, res) => {
 *          200:
 *            description: Successfully created
 */
-
-router.post("/profile",async (req, res) => {
-  userAuth,
-  userCtrl.checkRole(['user']),
-  await userCtrl.getprofile(req,res);
+router.post("/profile" ,userAuth, async (req, res) => {
+  return res.json(userCtrl.serializeUser(req.user));
 });
-
 
 module.exports = router;

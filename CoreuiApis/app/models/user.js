@@ -1,9 +1,9 @@
-'use strict';
 
 const { v4: uuid } = require('uuid');
 const mongoose = require('mongoose');
-
+const role = require('../lib/role');
 const { roles, USER } = require('../constants/roles');
+const { User } = require('../lib/role');
 
 const { Schema } = mongoose;
 const options = {
@@ -11,7 +11,7 @@ const options = {
 };
 
 const UserSchema = new Schema({
-  id: { type: String, default: uuid, unique: true },
+  // id: { type: String, default: uuid, unique: true },
   name: {
     type: String,
     required: true,
@@ -31,9 +31,9 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: roles,
-    default: USER,
     trim: true,
+    default: User,
+    enum: roles,
   },
   password: {
     type: String,

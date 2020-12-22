@@ -50,6 +50,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+require('./middleware/passport')(passport)
 require('./app/routes')(app)
 
 const onServerStart = () => {
