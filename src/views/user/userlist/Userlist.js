@@ -41,7 +41,8 @@ export default class Userlist extends Component {
   }
 
   getUserList() {
-    fetch('http://localhost:3000/api/v1/users?page=' + this.state.currentPage, {
+    // fetch('http://localhost:3000/api/v1/users?page=' + this.state.currentPage, {
+      fetch('http://localhost:3000/api/v1/users', {
       method: 'GET'
     })
       .then(response => response.json())
@@ -52,18 +53,18 @@ export default class Userlist extends Component {
       })
   }
 
-  setActivepage(activepg){
-      this.setState({ currentPage : activepg})
-      fetch('http://localhost:3000/api/v1/users?page=' + activepg, {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then((data) => {
-        if (data.statuscode === 200) {
-          this.setState({ setData: data.data.docs, pagination: data.data})
-        }
-      })
-  }
+  // setActivepage(activepg){
+  //     this.setState({ currentPage : activepg})
+  //     fetch('http://localhost:3000/api/v1/users?page=' + activepg, {
+  //     method: 'GET'
+  //   })
+  //     .then(response => response.json())
+  //     .then((data) => {
+  //       if (data.statuscode === 200) {
+  //         this.setState({ setData: data.data.docs, pagination: data.data})
+  //       }
+  //     })
+  // }
 
   onTblPageChange(){
     console.log("Hello Change");
@@ -119,11 +120,11 @@ export default class Userlist extends Component {
                 hover
                 sorter
                 striped
-                itemsPerPageSelect
-                onPageChange={this.onTblPageChange()}
-                itemsPerPage={10}
+                pagination
+                align="center"
                 clickableRows
-                // pagination
+                itemsPerPageSelect
+                itemsPerPage={5}
                 // onRowClick={(item) => this.props.history.push(`/user/userdetail/${item.id}`)}
                 scopedSlots={{
                   'Action':
@@ -144,7 +145,7 @@ export default class Userlist extends Component {
                 }}
               />
             </CCardBody>
-            <CCardFooter>
+            {/* <CCardFooter>
               <CPagination
                 activePage={this.state.currentPage}
                 pages={this.state.pagination.totalPages}
@@ -152,7 +153,7 @@ export default class Userlist extends Component {
                 align="center"
                 onActivePageChange={(i) => this.setActivepage(i)}
               ></CPagination>
-            </CCardFooter>
+            </CCardFooter> */}
             <CModal
               show={this.state.showModal}
               onClose={() => this.setState({ showModal: false })}

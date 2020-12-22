@@ -6,23 +6,24 @@ import {
   TheHeader
 } from './index'
 import { CSpinner } from '@coreui/react';
+import Cspinner from '../reusable/CSpinner';
 
 export default class TheLayout extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super()
     this.state = {
-       isLoaded: false
+      loading: false
     }
- }
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ loading: true })
+    }, 1000)
+  }
 
-  // componentWillMount() {
-  //   setTimeout(function () { //Start the timer
-  //     this.setState({ isLoaded: true }) //After 1 second, set render to true
-  //   }.bind(this), 2000)
-  // }
   render() {
-    // if (this.state.isLoaded) {
+    if (this.state.loading) {
       return (
         <div className="c-app c-default-layout">
           <TheSidebar />
@@ -35,10 +36,12 @@ export default class TheLayout extends Component {
           </div>
         </div>
       )
-    // } else {
-    //   return (
-    //     <CSpinner className="overlay" position="top-center" animation="grow" variant="warning" size="lg" color="warning" />
-    //   )
-    // }
+    } else {
+      return (
+        <div>
+          <Cspinner />
+        </div>
+      )
+    }
   }
 }

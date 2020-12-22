@@ -57,7 +57,7 @@ const getUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   try {
     // const result = await User.findById({ id: req.params.id }, { password: false });
-    const result = await User.findById({ id: req.params.id });
+    const result = await User.findById({ id: req.params });
     res.json(result);
   } catch (error) {
     next(error);

@@ -12,9 +12,9 @@ const options = {
 };
 
 const UserSchema = new Schema({
-  // id: { type: String,
-  //    default: uuid,
-  //     unique: true },
+  id: { type: String,
+     default: uuid,
+      unique: true },
   name: {
     type: String,
     required: true,

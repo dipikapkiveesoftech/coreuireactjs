@@ -20,10 +20,13 @@ import {
     CDropdownToggle,
     CBadge,
     CSelect,
-    CToast
+    CToast,
+    CSpinner
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react';
 import ToasterSep from '../../../reusable/ToasterSep';
+import Cspinner from '../../../reusable/CSpinner';
+import { Redirect, Route, Link } from 'react-router-dom'
 
 export default class Adduserlist extends Component {
 
@@ -37,12 +40,15 @@ export default class Adduserlist extends Component {
             errors: {},
             setShow: false,
             list: [],
-            data:[]
+            data: []
         }
         this.handleChange = this.handleChange.bind(this);
         this.submituserRegisterForm = this.submituserRegisterForm.bind(this);
     }
 
+    componentDidMount() {
+        
+    }
     handleChange(e) {
         let fields = this.state.fields;
         fields[e.target.name] = e.target.value;
@@ -51,6 +57,9 @@ export default class Adduserlist extends Component {
         });
     }
 
+    changeList() {
+        window.location.href = '/#/user'
+    }
     submituserRegisterForm(e) {
         e.preventDefault();
 
@@ -68,26 +77,26 @@ export default class Adduserlist extends Component {
                     role: fields["role"]
                 })
             }
-            fetch('http://localhost:3000/api/v1/users/',requestOptions)
-            .then(response => response.json())
-            .then(data => {
+            fetch('http://localhost:3000/api/v1/users/', requestOptions)
+                .then(response => response.json())
+                .then(data => {
                     if (data.id) {
                         this.setState({
                             list: [{
-                                title: "Success",
-                                description: "Addedd user successfully",
-                                color: "success"
-                            }]
+                                message: "Addedd user successfully",
+                                color: "success",
+
+                            }],
+                            fields: [''],
                         })
-                        
+                        // window.location.href = '/#/user'
                         // const error = (data && data.message) || response.status;
                         // return Promise.reject(error);
                     }
-                    if(data.message){
+                    if (data.message) {
                         this.setState({
                             list: [{
-                                title: "Error",
-                                description: data.message,
+                                message: "somting wrong",
                                 color: "danger"
                             }]
                         })
@@ -96,14 +105,11 @@ export default class Adduserlist extends Component {
                 .catch(error => {
                     this.setState({
                         list: [{
-                            title: "Error",
-                            description: "Network Error",
+                            message: "Network Error",
                             color: "danger"
                         }]
                     })
                 });
-            
-
         }
     }
 
@@ -128,10 +134,9 @@ export default class Adduserlist extends Component {
             if (!pattern.test(fields["mobile"])) {
                 formIsValid = false;
                 errors["mobile"] = "*Please enter only number.";
-            }else if(fields["mobile"].length != 10){
+            } else if (fields["mobile"].length != 10) {
                 formIsValid = false;
                 errors["mobile"] = "Please enter valid mobile number.";
-            
             }
         }
 
@@ -175,9 +180,7 @@ export default class Adduserlist extends Component {
             <>
                 <ToasterSep
                     toastList={this.state.list}
-                    position="top-right"
-                    onClose="window.location.href = '/'"
-                    color="success" />
+                    onClose={() => <Link to="/#/user" />} />
                 <CCol xl={12}>
                     <CCard className="mx-4">
                         <CCardBody className="p-4">

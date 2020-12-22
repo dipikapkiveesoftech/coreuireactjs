@@ -13,17 +13,25 @@ import {
   CCallout
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import Cspinner from '../../reusable/CSpinner'
 
-export default class Dashboard extends Component{
+export default class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      setShow: true
+      setShow: true,
+      isLoaded: false
     }
   }
-  render(){
-  return (
-    <>
+  componentDidMount() {
+    setTimeout(function () { //Start the timer
+      this.setState({ isLoaded: true }) //After 1 second, set render to true
+    }.bind(this), 10000)
+  }
+  render() {
+    if (this.state.isLoaded) {
+    return (
+      <>  
       <CCard>
         <CCardBody>
           <CRow>
@@ -106,13 +114,11 @@ export default class Dashboard extends Component{
           </CRow>
         </CCardFooter>
       </CCard>
-
-
       <CRow>
         <CCol>
           <CCard>
             <CCardHeader>
-              Traffic {' & '} Sales
+                  Traffic {' & '} Sales
             </CCardHeader>
             <CCardBody>
               <CRow>
@@ -140,7 +146,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                        Monday
+                            Monday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -151,7 +157,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Tuesday
+                            Tuesday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -162,7 +168,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Wednesday
+                            Wednesday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -173,7 +179,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Thursday
+                            Thursday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -184,7 +190,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Friday
+                            Friday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -195,7 +201,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Saturday
+                            Saturday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -206,7 +212,7 @@ export default class Dashboard extends Component{
                   <div className="progress-group mb-4">
                     <div className="progress-group-prepend">
                       <span className="progress-group-text">
-                      Sunday
+                            Sunday
                       </span>
                     </div>
                     <div className="progress-group-bars">
@@ -549,7 +555,15 @@ export default class Dashboard extends Component{
           </CCard>
         </CCol>
       </CRow>
-    </>
-  )}
+      </>
+    )
+    } else {
+      return (
+        <div className="bgspin">
+         <Cspinner />
+        </div>
+      )
+    }
+  }
 }
 

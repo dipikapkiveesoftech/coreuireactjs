@@ -15,17 +15,13 @@
     color: #6B8E23;
     margin-bottom: 10px;
   }
-// .alert, .toast{
-//     position: absolute !important;
-//     top:0px !important;
-//     right: 0px !important;
-//     z-index: inherit;
-//  }
 
 .overlay {
   position: absolute;
-    top: 50%;
-    left: 50%;
+  top: 50%;
+  left: 50%;
+  width: 4rem;
+  height: 4rem;
 }
 .alert{
   position: absolute !important;
@@ -36,3 +32,5 @@
   color: white !important;
   padding: 20px !important;
 }
+
+
